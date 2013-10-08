@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+function displayResult()
+{
+var table=document.getElementById("myTable");
+var row=table.insertRow(0);
+var cell1=row.insertCell(0);
+var cell2=row.insertCell(1);
+cell1.innerHTML="New";
+cell2.innerHTML="New";
+}
+function dispData()
+{ 
+	alert("Test");
+}
+</script>
+</head>
+<body>
+<table id="dateTable" border="1">
+	<tr><td>Dates</td></tr>
+</table>
+<table id="myTable" border="1">
+  <tr>
+    <td>cell 1</td>
+    <td>cell 2</td>
+  </tr>
+  <tr>
+    <td>cell 3</td>
+    <td>cell 4</td>
+  </tr>
+</table>
+<br>
+<button type="button" onclick="displayResult()">Insert new row</button>
+</body>
+</html>

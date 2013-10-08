@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/Proj/SmartGrid/!svn/ver/585/Rudin/steam
+END
+compile_covariates.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/Proj/SmartGrid/!svn/ver/576/Rudin/steam/compile_covariates.py
+END
+weather_covariates_steam.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/Proj/SmartGrid/!svn/ver/573/Rudin/steam/weather_covariates_steam.py
+END
+steam.py
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/Proj/SmartGrid/!svn/ver/572/Rudin/steam/steam.py
+END
+historical_covariates_steam.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/Proj/SmartGrid/!svn/ver/573/Rudin/steam/historical_covariates_steam.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/Proj/SmartGrid/!svn/ver/479/Rudin/steam/__init__.py
+END
+cross_validate.py
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/Proj/SmartGrid/!svn/ver/585/Rudin/steam/cross_validate.py
+END
+predict_steam_usage.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/Proj/SmartGrid/!svn/ver/575/Rudin/steam/predict_steam_usage.py
+END

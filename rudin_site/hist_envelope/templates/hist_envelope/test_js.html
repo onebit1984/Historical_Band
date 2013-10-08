@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style type="text/css">
+			body {
+				background-color: black;
+				color: white;
+			}
+		</style>
+<script>
+function myfunction()
+{
+alert("Welcome to my world!!");
+}
+function callLoop(n)
+{
+	for(i=0;i<n;i++)
+	{
+
+		document.write(i);
+	}
+}
+</script>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8">
+d3.select("body").style("backgroud-color","black");
+</script>
+</head>
+
+<body>
+<svg width="50" height="50">
+    <circle cx="25" cy="25" r="22"
+     fill=rgba(10,150,20,1) stroke="gray" stroke-width="2"/>
+</svg>
+	<img src="/Users/VB/Documents/Python/Django/rudin_site/hist_envelope/static/pulpit.jpg" alt="No image">
+	<form name="myform">
+	<input type="text" value="Enter Text Here">
+<input type="button" value="Hit me" onclick="callLoop(5)">
+<table border=3>
+	<tr><td>Celsius</td><td>Farenheit</td></tr>
+	<script language="javascript">
+	for(i=0;i<51;i++){
+		document.write("<tr><td>",i,"</td><td>",(i*1.8)+32,"</td></tr>");
+	}
+			
+</script>
+</table>
+</form>
+</body>
+</html>

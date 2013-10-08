@@ -1,0 +1,9 @@
+{% if date_list %}
+	<ul>
+	{% for item in date_list %}
+		<li> {{item}} </li>
+	{%endfor%}
+	</ul>
+{% else %}
+	<p> Data not available 404 }:-)</p>
+{% endif %}

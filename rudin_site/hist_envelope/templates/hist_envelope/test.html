@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>  
+      <meta charset="utf-8">
+        <title>D3 Test</title>
+        <script type="text/javascript" src="{{STATIC_URL}}d3/d3/d3.v3.js"></script>
+ </head>
+	<body>
+		Test Page
+	<script type="text/javascript">
+	var input_day = {{input_day}}
+	var dataset = new Array;
+	var j=0;
+	{% for item in dates %}
+		dataset[j] = {{item}};
+		j += 1;
+	{% endfor %}
+	d3.select("body").selectAll("p")
+	  .data(dataset)
+	  .enter()
+	  .append("a")
+	  .attr("href",function(d) { return "http://localhost:8000/hist_envelope/"+d+"/show_load";})
+	  .text(function(d) { return d;});
+</script>
+	</body>
+</html>

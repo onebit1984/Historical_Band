@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>  
+<style>
+
+div.bar {
+display: inline-block;
+width: 20px;
+height: 75px;
+background-color: teal;
+}
+body{
+  font: 10px san-serif;
+}
+.line{
+  fill:none;
+  stroke: green;
+  stoke-width: 1.5px;
+}
+.area{
+  fill: steelblue;
+}
+.text{
+  font-size: 30px;
+}
+</style>
+      <meta charset="utf-8">
+        <title>Historical Envelope</title>
+        <script type="text/javascript" src="{{STATIC_URL}}d3/d3/d3.v3.js"></script>
+ </head>
+	<body>
+	<script type="text/javascript">
+		d3.select("body")
+	    .style("color", "green") // make the body green
+      .transition()
+    .style("color", "red"); 	
+	parseDate = d3.time.format("%Y%j").parse;
+	var input_day = {{input_day}};
+	inputDay = parseDate(input_day.toString());	
+	d3.select("body")
+		.append("h1")
+		.text(inputDay.toLocaleDateString())
+		.attr("align","center");
+	var datasetAll = {{load_dataset|safe}};
+	var datasetW = {{weather_dataset|safe}};
+	var keys = {{keys}};
+	var margin = {top: 20, right: 80, bottom: 30, left: 150},
+	    w = 960 - margin.left - margin.right,
+	    h = 500 - margin.top - margin.bottom;
+
+	var color = d3.scale.category10();
+	var color_area = d3.scale.category20();
+	var color_area = {all:"#1f77b4",upper:"#2ca02c",lower:"#d62728"}
+	var color_area = {all:"#1f77b4",upper:"#2ca02c",lower:"#2ca02c"}
+	//color_area.domain(["all","upper","lower"]);
+	
+	var x= d3.scale.linear()
+	  .range([0,w]);
+
+	var y = d3.scale.linear()
+	  .range([0,h]);
+
+	var xAxis = d3.svg.axis()
+	  .scale(x)
+	  .orient("bottom");
+
+	var yAxis = d3.svg.axis()
+	  .scale(y)
+	  .orient("left");
+	
+	var line = d3.svg.line()
+	  .x(function(d) {return x(d.date);})
+	  .y(function(d) {return y(d.data);});
+
+	var area = d3.svg.area()
+	  .x(function(d) { return x(d.date);})
+  	  .y0(function(d) { return y(d.min);})
+	  .y1(function(d) {return y(d.max);});	  
+
+	var svg = d3.select("body")
+	  .append("svg")
+	  .attr("width",w+margin.left + margin.right)
+	  .attr("height",h+margin.top+margin.bottom)
+	  .append("g")
+	  .attr("transform","translate(" + margin.left + ","+ margin.top +")");
+	
+	x.domain(d3.extent(datasetAll, function(d) { return d[0];}));
+	y.domain(
+		[d3.max(datasetAll, function(d) { return d3.max(d.slice(1,d.length));}),
+		d3.min(datasetAll, function(d) { return d3.min(d.slice(1,d.length));})]);
+
+
+	svg.append("g")
+	  .attr("class","x axis")
+	  .attr("transform","translate(0,"+ h+")")
+	  .call(xAxis);
+
+	svg.append("g")
+	  .attr("class","y axis")
+	  .call(yAxis)
+	.append("text")
+	  .attr("transform","rotate(-90)")
+	  .attr("y",-30)
+	  .attr("dy",".71em")
+	  .attr("x",-(h/2))
+	  .style("text-anchor","middle")
+	  .text("Steam Load (Mlb/Hr)")
+	  .style("font-size","15px");
+
+	color.domain(keys);
+
+	var loads = color.domain().map(function(name,i){
+		return {name: name,
+			values: datasetAll.map(function(d) {
+			return {date: d[0], data: +d[i+1]}
+			})}
+		});
+
+var load_band = [
+{ name: 'upper', values : [datasetAll.map(function(d){
+					return {date: d[0], max: d3.max(d.slice(1,d.length)), min: d[1] };
+					})]},
+{name: 'lower', values: [datasetAll.map(function(d){
+					return {date: d[0], max: d[1], min: d3.min(d.slice(1,d.length))};
+					})]}];
+	var weathers = color.domain().slice(0,datasetW[0].length-1).map(function(name,i){
+			return {name: name,
+			values: datasetW.map(function(d){
+				return {date: d[0], data: +d[i+1]};
+				})
+			}
+			});
+	
+	svg.selectAll(".load")
+	  .data(loads)
+	  .enter()
+	  .append("g")
+	  .attr("class","load")
+	  .append("path")
+	  .transition()
+	  .delay(100)
+	  .duration(1000)
+	  .attr("class","line")
+	  .attr("d",function(d) { return line(d.values); })
+	  .style("stroke",function(d) {return color(d.name);});
+
+
+	x.domain(d3.extent(datasetW, function(d) { return d[0];}));
+	y.domain(
+		[d3.max(datasetW, function(d) { return d3.max(d.slice(1,d.length));}),
+		d3.min(datasetW, function(d) { return d3.min(d.slice(1,d.length));})]);
+
+
+	var svg_weather = d3.select("body")
+	  .append("svg")
+	  .attr("width",w+margin.left + margin.right)
+	  .attr("height",h+margin.top+margin.bottom)
+	  .append("g")
+	  .attr("transform","translate(" + margin.left + ","+ margin.top +")");
+
+	svg_weather.append("g")
+	  .attr("class","x axis")
+	  .attr("transform","translate(0,"+ h+")")
+	  .call(xAxis);
+
+	svg_weather.append("g")
+	  .attr("class","y axis")
+	  .call(yAxis)
+	.append("text")
+	  .attr("transform","rotate(-90)")
+	  .attr("y",-30)
+	  .attr("dy",".71em")
+	  .attr("x",-(h/2))
+	  .style("text-anchor","middle")
+	  .text("Humidex")
+	  .style("font-size","15px");
+
+	svg_weather.selectAll(".weather")
+	  .data(weathers)
+	  .enter()
+	  .append("g")
+	  .attr("class","weather")
+	  .append("path")
+	  .attr("class","line")
+	  .attr("d",function(d) { return line(d.values); })
+	  .style("stroke",function(d) {return color(d.name);});
+
+	x.domain(d3.extent(datasetAll, function(d) { return d[0];}));
+	y.domain(
+		[d3.max(datasetAll, function(d) { return d3.max(d.slice(1,d.length));}),
+		d3.min(datasetAll, function(d) { return d3.min(d.slice(1,d.length));})]);
+
+	var svg_area = d3.select("body")
+	  .append("svg")
+	  .attr("width",w+margin.left + margin.right)
+	  .attr("height",h+margin.top+margin.bottom)
+	  .append("g")
+	  .attr("transform","translate(" + margin.left + ","+ margin.top +")");
+
+	svg_area.append("g")
+	  .attr("class","x axis")
+	  .attr("transform","translate(0,"+ h+")")
+	  .call(xAxis);
+
+	svg_area.append("g")
+	  .attr("class","y axis")
+	  .call(yAxis)
+	.append("text")
+	  .attr("transform","rotate(-90)")
+	  .attr("y",-30)
+	  .attr("dy",".71em")
+	  .attr("x",-(h/2))
+	  .style("text-anchor","middle")
+	  .text("Steam Load (Mlb/Hr)")
+	  .style("font-size","15px");
+
+	svg_area.selectAll(".load_area")
+	  .data(load_band)
+	  .enter()
+	  .append("g")
+	  .attr("class","load_area")
+	  .append("path")
+	  .attr("class","area")
+	  .attr("d",function(d) { return area(d.values[0]); })
+	  .style("fill",function(d) {return color_area[d.name];});
+	
+</script>
+	</body>
+</html>
